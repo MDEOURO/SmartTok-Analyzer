@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartTok Analyzer - Análise de Produtos TikTok</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="tiktok-icon-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.887 2.887 2.896 2.896 0 0 1-2.887-2.887 2.896 2.896 0 0 1 2.887-2.887c.294 0 .577.043.844.124V9.402a6.326 6.326 0 0 0-.844-.057A6.335 6.335 0 0 0 3 15.672 6.335 6.335 0 0 0 9.335 22a6.335 6.335 0 0 0 6.335-6.328v-6.91a8.17 8.17 0 0 0 4.788 1.543V6.877a4.8 4.8 0 0 1-.869-.191z" fill="#00F2FE"/>
+            <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.887 2.887 2.896 2.896 0 0 1-2.887-2.887 2.896 2.896 0 0 1 2.887-2.887c.294 0 .577.043.844.124V9.402a6.326 6.326 0 0 0-.844-.057A6.335 6.335 0 0 0 3 15.672 6.335 6.335 0 0 0 9.335 22a6.335 6.335 0 0 0 6.335-6.328v-6.91a8.17 8.17 0 0 0 4.788 1.543V6.877a4.8 4.8 0 0 1-.869-.191z" fill="#FF0050" style="mix-blend-mode: lighten; transform: translate(-2px, -1px);"/>
+          </svg>
+        </div>
+        <div>
+          <h1>SmartTok <span>Analyzer</span></h1>
+          <p class="subtitle">Análise Matemática de Viabilidade de Produtos</p>
+        </div>
+      </div>
+      <div class="period-selector">
+        <button class="btn-period active" data-period="7d">Últimos 7 dias</button>
+        <button class="btn-period" data-period="30d">Últimos 30 dias</button>
+      </div>
+    </header>
+
+    <main class="dashboard-grid">
+      <!-- Painel de Entrada Visual Estilo TikTok -->
+      <section class="card input-card-tiktok">
+        <div class="card-header">
+          <h2>Tendências de produtos</h2>
+          <span class="badge-hint">Preencha conforme o TikTok Shop</span>
+        </div>
+
+        <form id="metricsForm" class="tiktok-grid">
+          <!-- Card 1: Pedidos -->
+          <div class="tt-metric-card" data-field="orders">
+            <div class="tt-label">Pedidos</div>
+            <input type="number" id="orders" class="tt-main-input" value="3" required>
+            
+            <button type="button" class="btn-open-variation val-up" id="ordersVarBtn">
+              <span class="var-badge-icon">▲</span>
+              <span class="var-badge-text" id="ordersVarText">2</span>
+            </button>
+            <input type="hidden" id="ordersDeltaDir" value="up">
+            <input type="hidden" id="ordersDelta" value="2">
+          </div>
+
+          <!-- Card 2: CTR -->
+          <div class="tt-metric-card" data-field="ctr">
+            <div class="tt-label">CTR</div>
+            <div class="tt-input-with-suffix">
+              <input type="number" id="ctr" class="tt-main-input" step="0.1" value="7.6" required>
+              <span class="tt-percent-sign">%</span>
+            </div>
+            
+            <button type="button" class="btn-open-variation val-up" id="ctrVarBtn">
+              <span class="var-badge-icon">▲</span>
+              <span class="var-badge-text" id="ctrVarText">2,5%</span>
+            </button>
+            <input type="hidden" id="ctrDeltaDir" value="up">
+            <input type="hidden" id="ctrDelta" value="2.5">
+          </div>
+
+          <!-- Card 3: Número de Criadores -->
+          <div class="tt-metric-card" data-field="creators">
+            <div class="tt-label">Número de criadores</div>
+            <input type="number" id="creators" class="tt-main-input" value="3" required>
+            
+            <button type="button" class="btn-open-variation val-down" id="creatorsVarBtn">
+              <span class="var-badge-icon">▼</span>
+              <span class="var-badge-text" id="creatorsVarText">2</span>
+            </button>
+            <input type="hidden" id="creatorsDeltaDir" value="down">
+            <input type="hidden" id="creatorsDelta" value="2">
+          </div>
+
+          <!-- Card 4: Usuários no Carrinho -->
+          <div class="tt-metric-card" data-field="cartAdds">
+            <div class="tt-label">Usuários que adicionaram ao carrinho</div>
+            <input type="number" id="cartAdds" class="tt-main-input" value="10" required>
+            
+            <button type="button" class="btn-open-variation val-down" id="cartVarBtn">
+              <span class="var-badge-icon">▼</span>
+              <span class="var-badge-text" id="cartVarText">5</span>
+            </button>
+            <input type="hidden" id="cartDeltaDir" value="down">
+            <input type="hidden" id="cartDelta" value="5">
+          </div>
+
+          <button type="submit" class="btn-analyze-tiktok">
+            <span>Calcular & Analisar</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+
+        <!-- Overlay / Backdrop para Celular -->
+        <div id="modalBackdrop" class="modal-backdrop hidden"></div>
+
+        <!-- Modal Profissional de Variação (Mobile & Desktop) -->
+        <div id="variationModal" class="variation-modal hidden">
+          <div class="modal-header">
+            <h3 id="modalTitle">Definir Variação</h3>
+            <button type="button" id="btnCloseModal" class="btn-close-modal">✕</button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="trend-direction-selector">
+              <button type="button" id="btnDirUp" class="dir-btn opt-up active">
+                <span class="arrow">▲</span>
+                <span>SUBIU (Verde)</span>
+              </button>
+              <button type="button" id="btnDirDown" class="dir-btn opt-down">
+                <span class="arrow">▼</span>
+                <span>CAIU (Vermelho)</span>
+              </button>
+            </div>
+
+            <div class="modal-input-group">
+              <label for="modalInputVal">Valor da Variação (número positivo):</label>
+              <input type="number" id="modalInputVal" step="0.1" placeholder="Ex: 2.5" min="0">
+            </div>
+
+            <button type="button" id="btnApplyVariation" class="btn-apply-modal">Confirmar Variação</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Painel de Métricas Derivadas do Quadro -->
+      <section class="card hidden-metrics-card">
+        <div class="card-header">
+          <h2>Análise das Métricas do Quadro</h2>
+          <span class="badge-neon">Cruzamento Matemático</span>
+        </div>
+
+        <div class="metrics-list">
+          <div class="metric-box">
+            <div class="metric-title">Taxa de Conversão do Carrinho</div>
+            <div class="metric-value highlighting" id="resCartToSale">30,0%</div>
+            <div class="metric-sub">Dos que colocam no carrinho, quantos compram</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-title">Carrinhos por Pedido</div>
+            <div class="metric-value" id="resCartsPerOrder">3,33</div>
+            <div class="metric-sub">Quantas pessoas abandonam o carrinho por venda</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-title">Pedidos por Criador</div>
+            <div class="metric-value" id="resOrdersPerCreator">1,00</div>
+            <div class="metric-sub">Volume médio gerado por cada criador ativo</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-title">Carrinhos por Criador</div>
+            <div class="metric-value" id="resCartsPerCreator">3,33</div>
+            <div class="metric-sub">Interesse gerado por cada criador</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Painel de Veredito & Diagnóstico -->
+      <section class="card verdict-card">
+        <div class="card-header">
+          <h2>Diagnóstico de Investimento</h2>
+          <div id="verdictBadge" class="verdict-badge status-warning">ATENÇÃO / RISCO</div>
+        </div>
+
+        <div class="verdict-body">
+          <div class="score-container">
+            <div class="score-circle">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="scoreCircle" class="circle" stroke-dasharray="45, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.35" class="percentage" id="scoreText">45</text>
+              </svg>
+            </div>
+            <div class="score-label">Pontuação do Produto</div>
+          </div>
+
+          <div class="reasons-container">
+            <h3>Por que esta nota? (Análise Causal)</h3>
+            <ul class="reasons-list" id="reasonsList">
+              <!-- Preenchido via JavaScript -->
+            </ul>
+          </div>
+        </div>
+      </section>
+
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
