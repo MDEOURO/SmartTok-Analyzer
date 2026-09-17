@@ -260,34 +260,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartVarPct = ((Math.abs(cartDelta) / prevCartAdds) * 100).toFixed(1);
     const creatorsVarPct = ((Math.abs(creatorsDelta) / prevCreators) * 100).toFixed(1);
 
-    // === 1. COLAPSO DE DEMANDA VS SATURAÇÃO (Insight exigido pelo usuário) ===
-    if (cartDir === 'down' && creatorsDir === 'up') {
-      score -= 30;
-      weakPoints.push(`<strong>Colapso Matemático:</strong> O interesse encolheu (Carrinhos: -${cartVarPct}%), mas a concorrência explodiu (Afiliados: +${creatorsVarPct}%). O bolo está menor e com muito mais gente disputando.`);
-      recommendations.push(`<strong>Pule Fora:</strong> O mercado para este produto entrou em saturação aguda. A matemática de tráfego orgânico não vai fechar com tanta concorrência para pouca demanda.`);
-    } else if (ordersDir === 'down' && cartDir === 'down') {
-      // Ambos caíram. Caiu proporcional ou não?
+    // === 1. ANÁLISE DE FUNIL (Pedidos vs Carrinhos) ===
+    if (ordersDir === 'down' && cartDir === 'down') {
       if ((Math.abs(ordersDelta) / prevOrders) > (Math.abs(cartDelta) / prevCartAdds) * 1.3) {
          score -= 20;
-         weakPoints.push(`<strong>Fuga no Checkout:</strong> As vendas caíram muito mais rápido (-${ordersVarPct}%) do que as adições ao carrinho (-${cartVarPct}%). O cliente entra na loja mas foge antes de pagar.`);
-         recommendations.push(`<strong>Atenção ao Frete/Preço:</strong> Algo mudou na loja nos últimos dias (frete mais caro ou preço subiu) e está matando a conversão final.`);
+         weakPoints.push(`<strong>Fuga no Checkout:</strong> As vendas caíram num ritmo muito maior (-${ordersVarPct}%) do que as adições ao carrinho (-${cartVarPct}%). O cliente entra, mas foge na hora H.`);
+         recommendations.push(`<strong>Atenção ao Frete/Preço:</strong> Algo mudou na loja nos últimos dias (frete caro ou estoque zerado) matando a conversão final.`);
       } else {
          score -= 10;
-         weakPoints.push(`<strong>Tendência de Queda Proporcional:</strong> O produto esfriou no mercado. Tanto o interesse (-${cartVarPct}%) quanto as vendas (-${ordersVarPct}%) caíram na mesma proporção.`);
+         weakPoints.push(`<strong>Tendência de Queda Proporcional:</strong> O interesse (-${cartVarPct}%) e as vendas (-${ordersVarPct}%) estão caindo na mesma proporção. O produto está perdendo a tração inicial.`);
       }
-    }
-
-    // === 2. ESCALA PERFEITA (Vendas subindo, Concorrência caindo/plana) ===
-    if (ordersDir === 'up' && creatorsDir === 'down' && orders > 0) {
-      score += 20;
-      strongPoints.push(`<strong>Onda de Escalada (Oceano Azul Crescente):</strong> As vendas saltaram +${ordersVarPct}%, enquanto a concorrência caiu -${creatorsVarPct}%. Os concorrentes estão desistindo justo quando a demanda explode.`);
-      recommendations.push(`<strong>Multiplique a Frequência:</strong> É o cenário matemático perfeito. Publique o máximo de vídeos que puder para dominar o nicho.`);
+    } else if (ordersDir === 'up' && cartDir === 'down') {
+      score -= 5;
+      weakPoints.push(`<strong>Anomalia de Tráfego:</strong> As vendas até subiram (+${ordersVarPct}%), mas a entrada de pessoas no carrinho caiu drasticamente (-${cartVarPct}%). O topo do funil está secando.`);
+      recommendations.push(`<strong>Renove os Vídeos:</strong> Quem chega no checkout compra, mas o tráfego geral despencou. O algoritmo parou de entregar os vídeos antigos.`);
+    } else if (ordersDir === 'down' && cartDir === 'up') {
+      score -= 15;
+      weakPoints.push(`<strong>Tráfego Sujo (Curiosos):</strong> As adições ao carrinho dispararam (+${cartVarPct}%), mas as vendas despencaram (-${ordersVarPct}%). O vídeo viralizou para o público errado ou o frete assustou todo mundo.`);
     } else if (ordersDir === 'up' && cartDir === 'up' && orders > 0) {
       score += 15;
-      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo. O funil está funcionando e expandindo.`);
-    } else if (orders > 0 && orders < 20) {
+      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo proporcionalmente. O funil está redondo e em expansão.`);
+    }
+
+    // === 2. DINÂMICA DE MERCADO (Demanda vs Concorrência) ===
+    if (cartDir === 'down' && creatorsDir === 'up') {
+      score -= 30;
+      weakPoints.push(`<strong>Saturação Aguda (Alerta Vermelho):</strong> O interesse do público encolheu (-${cartVarPct}%), mas a concorrência explodiu (+${creatorsVarPct}%). O bolo está menor com muito mais gente disputando.`);
+      recommendations.push(`<strong>Pule Fora:</strong> A matemática de tráfego orgânico não vai fechar. O mercado para este produto entrou em modo tubarão.`);
+    } else if (ordersDir === 'up' && creatorsDir === 'down' && orders > 0) {
+      score += 20;
+      strongPoints.push(`<strong>Onda de Escalada (Oceano Azul Crescente):</strong> Vendas saltando (+${ordersVarPct}%), enquanto a concorrência foge (-${creatorsVarPct}%). Os rivais estão desistindo justo quando a demanda explode.`);
+      recommendations.push(`<strong>Acelere a Produção:</strong> Cenário matemático perfeito. Esmague o nicho publicando mais vídeos agora enquanto os outros dormem.`);
+    } else if (orders > 0 && orders < 20 && creatorsDir !== 'down') {
       score -= 5;
-      weakPoints.push(`<strong>Volume Tímido (${orders} pedidos):</strong> Apesar de ter vendas, a amostra geral é pequena para prever segurança a longo prazo.`);
+      weakPoints.push(`<strong>Volume Tímido (${orders} pedidos):</strong> Amostra pequena. É perigoso tirar conclusões definitivas com pouco volume absoluto.`);
     }
 
     // === 3. ANÁLISE DE CTR E RETENÇÃO (Cliques vazios vs Engajamento) ===
