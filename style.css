@@ -106,6 +106,32 @@ body {
   box-shadow: 0 2px 10px rgba(255, 0, 80, 0.3);
 }
 
+.strategy-selector {
+  display: flex;
+  background: #1a202c;
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+}
+
+.btn-strategy {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-strategy.active {
+  background: var(--tiktok-cyan);
+  color: #121212;
+  box-shadow: 0 2px 10px rgba(0, 242, 254, 0.3);
+}
+
 /* Dashboard Grid */
 .dashboard-grid {
   display: grid;
@@ -320,6 +346,10 @@ body {
 
 
 
+.input-card-tiktok {
+  grid-column: span 5;
+}
+
 @media (max-width: 900px) {
   .input-card-tiktok { grid-column: span 12; }
 }
@@ -356,13 +386,48 @@ body {
   font-size: 1.8rem;
   font-weight: 800;
   width: 100%;
+  min-width: 0;
+  flex: 1;
   outline: none;
   font-family: inherit;
+}
+
+/* Remover as setinhas padrão de input number que engolem espaço */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .tt-input-with-suffix {
   display: flex;
   align-items: baseline;
+  width: 100%;
+}
+
+.tt-mult-select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  outline: none;
+  cursor: pointer;
+  margin-left: 4px;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: center;
+}
+
+.tt-mult-select option {
+  background: var(--card-bg);
+  color: #fff;
 }
 
 .tt-percent-sign {
@@ -430,9 +495,32 @@ body {
   color: #ef4444;
 }
 
-.btn-analyze-tiktok {
+.form-actions {
   grid-column: span 2;
+  display: flex;
+  gap: 12px;
   margin-top: 12px;
+}
+
+.btn-clear-tiktok {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex: 0 0 auto;
+}
+
+.btn-clear-tiktok:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-analyze-tiktok {
+  flex: 1;
   background: linear-gradient(135deg, var(--tiktok-cyan) 0%, var(--tiktok-pink) 100%);
   border: none;
   color: #fff;
@@ -451,6 +539,17 @@ body {
 
 .btn-analyze-tiktok:active {
   transform: scale(0.98);
+}
+
+.tt-paid-inputs {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+.tt-paid-inputs.hidden {
+  display: none;
 }
 
 
@@ -501,7 +600,7 @@ body {
 
 /* Verdict Card */
 .verdict-card {
-  grid-column: span 7;
+  grid-column: span 12;
 }
 
 @media (max-width: 900px) {
@@ -595,6 +694,36 @@ body {
   padding-left: 18px;
   position: relative;
 }
+
+.diagnostic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .diagnostic-grid { grid-template-columns: 1fr; }
+}
+
+.diagnostic-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #f1f5f9;
+}
+
+.diagnostic-card strong {
+  display: block;
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+}
+
+.strong-card strong { color: #10b981; }
+.weak-card strong { color: #ef4444; }
+.recom-card strong { color: var(--tiktok-cyan); }
 
 .reasons-list li::before {
   content: "•";

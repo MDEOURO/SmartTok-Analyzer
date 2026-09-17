@@ -1,0 +1,11 @@
+{
+  "name": "smarttok-analyzer",
+  "version": "1.0.0",
+  "description": "SmartTok Analyzer",
+  "scripts": {
+    "dev": "npx -y http-server -p 3000 -c-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
