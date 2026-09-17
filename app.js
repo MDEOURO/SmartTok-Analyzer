@@ -278,13 +278,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // === 2. ESCALA PERFEITA (Vendas subindo, Concorrência caindo/plana) ===
-    if (ordersDir === 'up' && creatorsDir === 'down' && orders >= 20) {
-      score += 30;
+    if (ordersDir === 'up' && creatorsDir === 'down' && orders > 0) {
+      score += 20;
       strongPoints.push(`<strong>Onda de Escalada (Oceano Azul Crescente):</strong> As vendas saltaram +${ordersVarPct}%, enquanto a concorrência caiu -${creatorsVarPct}%. Os concorrentes estão desistindo justo quando a demanda explode.`);
-      recommendations.push(`<strong>Multiplique a Frequência:</strong> É o cenário matemático perfeito. Publique o máximo de vídeos que puder para dominar o nicho enquanto a concorrência dorme.`);
-    } else if (ordersDir === 'up' && cartDir === 'up' && orders >= 20) {
+      recommendations.push(`<strong>Multiplique a Frequência:</strong> É o cenário matemático perfeito. Publique o máximo de vídeos que puder para dominar o nicho.`);
+    } else if (ordersDir === 'up' && cartDir === 'up' && orders > 0) {
       score += 15;
-      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo. O funil está funcionando.`);
+      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo. O funil está funcionando e expandindo.`);
+    } else if (orders > 0 && orders < 20) {
+      score -= 5;
+      weakPoints.push(`<strong>Volume Tímido (${orders} pedidos):</strong> Apesar de ter vendas, a amostra geral é pequena para prever segurança a longo prazo.`);
     }
 
     // === 3. ANÁLISE DE CTR E RETENÇÃO (Cliques vazios vs Engajamento) ===
@@ -297,14 +300,28 @@ document.addEventListener('DOMContentLoaded', () => {
       strongPoints.push(`<strong>Gancho Validado:</strong> CTR matemático excelente (${ctr}%). A barreira do clique já foi vencida.`);
     }
 
-    // === 4. CÁLCULO DE CONCORRÊNCIA E FATIA DE MERCADO ===
+    // === 4. COMPORTAMENTO DE CHECKOUT (Conversão Real) ===
+    if (cartAdds > 0 && orders > 0) {
+      if (cartToSaleRate >= 30) {
+         score += 15;
+         strongPoints.push(`<strong>Conversão Extrema (${cartToSaleRate.toFixed(1)}%):</strong> Quem adiciona ao carrinho realmente compra. Oferta e frete estão irresistíveis para o cliente final.`);
+      } else if (cartToSaleRate < 15) {
+         score -= 15;
+         weakPoints.push(`<strong>Gargalo no Checkout (${cartToSaleRate.toFixed(1)}%):</strong> Muitos clicam no carrinho, quase ninguém paga. Susto com o preço ou frete alto de última hora.`);
+         recommendations.push(`<strong>Filtro de Curiosos:</strong> Revele o preço ou frete já no final do vídeo para filtrar quem não tem intenção de pagar.`);
+      } else {
+         strongPoints.push(`<strong>Conversão Padrão (${cartToSaleRate.toFixed(1)}%):</strong> A conversão da loja (do carrinho para a venda) está dentro da normalidade.`);
+      }
+    }
+
+    // === 5. CÁLCULO DE CONCORRÊNCIA E FATIA DE MERCADO ===
     const marketShareRatio = ordersPerCreator; // Vendas médias por afiliado
-    if (marketShareRatio < 0.5 && creators > 500) {
+    if (marketShareRatio < 0.5 && creators >= 20) {
       score -= 15;
       weakPoints.push(`<strong>Mercado Fatiado Demais:</strong> Com ${creators} afiliados, a fatia média é de apenas ${marketShareRatio.toFixed(2)} vendas por pessoa. Esforço desproporcional ao ganho.`);
-    } else if (marketShareRatio > 3 && creators < 100) {
-      score += 20;
-      strongPoints.push(`<strong>Alta Fartura por Afiliado:</strong> A média matemática atual é de ${marketShareRatio.toFixed(1)} vendas por afiliado ativo. Um cenário altamente rentável.`);
+    } else if (marketShareRatio > 2 && creators > 0) {
+      score += 15;
+      strongPoints.push(`<strong>Alta Fartura por Afiliado:</strong> A média matemática atual é de ${marketShareRatio.toFixed(1)} vendas por afiliado ativo. Um cenário altamente rentável e com espaço para você.`);
     }
 
     // === 5. CASOS DE ZERO ABSOLUTO (MAS COM OUTROS DADOS) ===
