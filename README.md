@@ -1,110 +1,60 @@
 # SmartTok Analyzer - Documentação de Arquitetura & Regras de Negócio
 
 ## 📋 Visão Geral do Projeto
-O **SmartTok Analyzer** é uma aplicação web leve e determinística criada para **Afiliados do TikTok Shop**. Seu objetivo é analisar matematicamente os dados fornecidos publicamente pelo TikTok Shop nos cards de "Tendências de Produtos" e entregar um diagnóstico de viabilidade para investimento em produção de vídeos (orgânico) ou anúncios pagos (TikTok Ads).
+O **SmartTok Analyzer** é uma aplicação web determinística focada em **viabilidade de investimento de tempo para Afiliados do TikTok Shop**. Seu objetivo é cruzar dados da tela de "Tendências de Produtos" em tempo real e gerar insights analíticos matematicamente precisos — alertando sobre saturação, tráfego sujo, fugas de checkout e crescimento orgânico.
 
 ---
 
-## 🎨 Design & Interface (UX/UI)
-* **Estilo Visual:** Réplica exata da interface oficial do TikTok Shop ("Tendências de produtos") com tema Dark Mode (`#0b0e14`) e acentos nas cores neons oficiais do TikTok (`#00F2FE` Cyan e `#FF0050` Pink).
-* **Grid 2x2 Responsivo:** Projetado para funcionar tanto em telas de computadores quanto em navegadores de telefones celulares:
-  1. **Pedidos** (Quantidade e Variação)
-  2. **CTR** (% de cliques e Variação)
-  3. **Número de Criadores** (Quantidade e Variação)
-  4. **Usuários que Adicionaram ao Carrinho** (Quantidade e Variação)
-* **Modal de Ajuste de Variação:** Ao clicar sobre a pílula de tendência de qualquer card (`▲ 2`, `▼ 5`), abre-se um modal responsivo centralizado com fundo desfocado onde o usuário seleciona o sinal (`▲ Subiu` ou `▼ Caiu`) e digita o valor absoluto, anulando qualquer conflito de sinais duplos.
+## 🎨 Atualizações de Interface e UX/UI
+* **Bloqueio de Vírgulas Removido:** Os campos de input foram atualizados para aceitar digitação fluida em diferentes padrões monetários. O travamento gerado pelo teclado numérico de navegadores brasileiros ao digitar "vírgulas" foi resolvido via `parseLocalFloat`.
+* **Auto-Limpeza Inteligente:** Ao focar em um campo que está zerado (`0` ou `0,00`), ele se esvazia instantaneamente, poupando a necessidade de "apagar manualmente" os zeros sem causar loops de foco do navegador.
+* **Diagnósticos em 2 Camadas:** Os alertas gerados pelo cruzamento de dados agora são entregues em formato modular e limpo:
+  * *Linha 1:* O evento matemático direto (ex: "Vendas subiram 80% e carrinhos subiram 7%").
+  * *Linha 2:* A tradução causal humana com emojis de rápido processamento (ex: "🚀 O que isso significa: O funil está redondo").
 
 ---
 
-## 🧮 Regras de Negócio & Fórmulas Matemáticas
+## 🧮 Matriz de Causalidade Simultânea (O "Cérebro" do App)
 
-A inteligência da aplicação **não utiliza inteligência artificial** (é 100% matemática e determinística).
+O sistema agora cruza múltiplas esferas de dados de forma **simultânea e independente**. O aplicativo não usa IA, trata-se de um algoritmo em JavaScript capaz de detectar anomalias (quando o topo do funil reage diferente do fundo).
 
-### 1. Métricas Derivadas
-* **Taxa de Conversão do Carrinho (Cart-to-Sale Rate):**
-  $$\text{Cart-to-Sale} = \left( \frac{\text{Pedidos}}{\text{Adicionados ao Carrinho}} \right) \times 100$$
-  *Medida de qualidade da oferta/checkout (preço e frete).*
-* **Abandono de Carrinho (Carrinhos por Pedido):**
-  $$\text{Carrinhos por Pedido} = \frac{\text{Adicionados ao Carrinho}}{\text{Pedidos}}$$
-* **Produtividade de Vendas por Criador:**
-  $$\text{Pedidos por Criador} = \frac{\text{Pedidos}}{\text{Número de Criadores}}$$
-* **Interesse Gerado por Criador:**
-  $$\text{Carrinhos por Criador} = \frac{\text{Adicionados ao Carrinho}}{\text{Número de Criadores}}$$
+### 1. Dinâmica de Funil (Pedidos vs Carrinhos)
+* **Fuga no Checkout:** Vendas despencando num ritmo maior que as intenções de compra. Acusa barreiras no checkout da loja (frete alto ou erro no site).
+* **Anomalia de Tráfego:** Vendas continuam altas mas intenções despencaram. Acusa que o algoritmo parou de entregar os vídeos antigos, apesar do produto converter bem.
+* **Tráfego Sujo:** Carrinhos disparam mas vendas não acontecem. Acusa vídeo atraindo curiosos (viral sujo) que desistem ao ver preço.
+* **Crescimento Saudável:** Topo e fundo de funil subindo de forma proporcional.
 
----
+### 2. Dinâmica de Mercado e Concorrência
+* **Saturação Aguda (Colapso):** O interesse do público encolhe enquanto a concorrência sobe. O mercado entrou em colapso matemático para novos entrantes.
+* **Onda de Escalada (Oceano Azul):** Demanda sobe mas concorrentes caem. Cenário de ouro para dominação de nicho orgânico.
 
-### 2. Matriz de Causalidade (Decisão do Afiliado)
+### 3. Fatiamento e Viabilidade Monetária
+* **Ganhos Projetados por Afiliado:** Métrica financeira real estimando a fatia monetária gerada pelo ecossistema para cada criador ativo.
+* **Mercado Fatiado Demais:** Menos de 0.5 vendas na média para cada afiliado num mar de +20 concorrentes acusa um esforço inútil.
 
-A nota global (0 a 100) é composta dinamicamente por 4 cenários causais principais:
-
-#### A. Concorrência entre Afiliados vs Oportunidade
-* **Criadores Caem ($\downarrow$) & Pedidos Subem ($\uparrow$):** `+25 Pontos`
-  * *Razão Causal:* Afiliados concorrentes abandonaram a divulgação do produto, mas a demanda do público continua em alta. Oportunidade perfeita para gravar vídeos orgânicos sem concorrência.
-* **Criadores Subem ($\uparrow$) & Pedidos Estagnados ($\downarrow$):** `-20 Pontos`
-  * *Razão Causal:* O mercado está saturado de vídeos do mesmo produto e a audiência do TikTok cansou de ver os mesmos criativos.
-* **Criadores Caem ($\downarrow$) & Pedidos Caem ($\downarrow$):** `-25 Pontos`
-  * *Razão Causal:* O produto perdeu o hype e entrou em curva de declínio no TikTok Shop.
-
-#### B. Atratividade Visual (CTR)
-* **CTR $\ge 5.0\%$ & Variação Subindo ($\uparrow$):** `+20 Pontos`
-  * *Razão Causal:* O produto atrai curiosidade imediata no feed. Excelente potencial viral.
-* **CTR $< 3.5\%$ ou Variação Caindo ($\downarrow$):** `-15 Pontos`
-  * *Razão Causal:* O vídeo não prende atenção rápida dos usuários.
-
-#### C. Saúde do Checkout (Conversão do Carrinho)
-* **Conversão do Carrinho $\ge 30\%$:** `+20 Pontos`
-  * *Razão Causal:* Preço e frete atrativos. 1 em cada 3 que colocam no carrinho finalizam a compra.
-* **Conversão do Carrinho $< 15\%$:** `-20 Pontos`
-  * *Razão Causal:* Alto abandono de carrinho. O frete ou o preço final travam a compra no checkout. **Recomendação expressa de NÃO rodar tráfego pago (anúncios).**
-
-#### D. Eficiência Média por Criador
-* **Pedidos por Criador $< 0.8$:** `-10 Pontos`
-  * *Razão Causal:* Criadores ativos gerando poucos resultados. Necessidade de mudar a abordagem do vídeo.
+### 4. Zero Absoluto e Estados de Partida
+* Se tudo estiver "0", o painel reconhece um **Produto Não Iniciado** e não faz punições irreais, exigindo vídeos de validação primária.
 
 ---
 
-## 🏗️ Estrutura de Arquivos da Aplicação
+## 🏗️ Estrutura de Arquivos
 
 ```
 SmartTok Analyzer/
-├── index.html        # Estrutura HTML semanticamente organizada e modals
-├── style.css         # Design tokens, variáveis HSL, cores TikTok e responsividade
-├── app.js            # Lógica JS pura (Event listeners, Math.abs, cálculo de Score e Razões)
-└── README.md         # Este guia de documentação técnica
+├── index.html        # Estrutura do App (Grid 2x2 e Grid de Resultados)
+├── style.css         # Design system Dark Mode TikTok
+├── app.js            # Engine matemática (parseLocalFloat, If/Else Matrix e Manipulação de DOM)
+└── README.md         # Documentação técnica e histórico
 ```
 
 ---
 
-## 🚀 Como Executar em Outro Computador
+## 🚀 Como Hospedar Oficialmente no Celular (Sem Banco de Dados)
 
-Como o projeto é construído em **HTML5 + CSS Vanilla + JavaScript ES6 (sem frameworks/sem compilação)**, ele não possui dependências de instalação (`node_modules`).
+O SmartTok Analyzer não requer banco de dados. Para gerar um link oficial, instalar no celular como PWA ou abrir de qualquer lugar, utilize a hospedagem gratuita e nativa do **GitHub Pages**:
 
-### Opção A: Execução Direta (Sem Servidor)
-1. Baixe a pasta ou clone o repositório do GitHub.
-2. Dê um duplo clique no arquivo `index.html`. Ele abrirá diretamente em qualquer navegador moderno (Chrome, Edge, Firefox, Safari).
-
-### Opção B: Servidor Local Simples (Opcional)
-Se desejar rodar em servidor local via terminal:
-```bash
-# Utilizando npx serve
-npx serve -l 3000
-
-# Ou utilizando Python
-python -m http.server 3000
-```
-Acesse em: `http://localhost:3000`
-
----
-
-## 📌 Passos Recomendados para Enviar ao GitHub
-
-No terminal dentro da pasta do projeto (`SmartTok Analyzer`), execute:
-
-```bash
-git init
-git add .
-git commit -m "feat: versão inicial estável do SmartTok Analyzer com matriz causal para afiliados"
-git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/SmartTok-Analyzer.git
-git push -u origin main
-```
+1. No seu repositório no GitHub, clique em **Settings** (Configurações).
+2. Acesse a guia **Pages** no menu lateral esquerdo.
+3. Em "Build and deployment > Source", mude o botão de "None" para a branch **main**.
+4. Clique em **Save**.
+5. Aguarde cerca de 1 a 2 minutos e atualize a página para visualizar o seu link web permanente (ex: `https://mdeouro.github.io/SmartTok-Analyzer`).
