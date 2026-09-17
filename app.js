@@ -283,62 +283,60 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ordersDir === 'down' && cartDir === 'down') {
       if ((Math.abs(ordersDelta) / prevOrders) > (Math.abs(cartDelta) / prevCartAdds) * 1.3) {
          score -= 20;
-         weakPoints.push(`<strong>Fuga no Checkout:</strong> As vendas caíram num ritmo muito maior (-${ordersVarPct}%) do que as adições ao carrinho (-${cartVarPct}%). O cliente entra, mas foge na hora H.`);
-         recommendations.push(`<strong>Atenção ao Frete/Preço:</strong> Algo mudou na loja nos últimos dias (frete caro ou estoque zerado) matando a conversão final.`);
+         weakPoints.push(`<strong>Fuga no Checkout:</strong> As vendas caíram num ritmo muito maior (-${ordersVarPct}%) do que as adições ao carrinho (-${cartVarPct}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">📉 <strong>O que isso significa:</strong> O cliente entra na loja, mas foge na hora H. Algo mudou nos últimos dias (como frete mais caro ou erro no site) matando a conversão final.</span>`);
       } else {
          score -= 10;
-         weakPoints.push(`<strong>Tendência de Queda Proporcional:</strong> O interesse (-${cartVarPct}%) e as vendas (-${ordersVarPct}%) estão caindo na mesma proporção. O produto está perdendo a tração inicial.`);
+         weakPoints.push(`<strong>Tendência de Queda Proporcional:</strong> O interesse (-${cartVarPct}%) e as vendas (-${ordersVarPct}%) estão caindo na mesma proporção.<br><br><span style="opacity: 0.85; font-size: 0.9em;">📉 <strong>O que isso significa:</strong> O produto está perdendo a tração inicial no mercado de forma natural. O público geral está perdendo o interesse.</span>`);
       }
     } else if (ordersDir === 'up' && cartDir === 'down') {
       score -= 5;
-      weakPoints.push(`<strong>Anomalia de Tráfego:</strong> As vendas até subiram (+${ordersVarPct}%), mas a entrada de pessoas no carrinho caiu drasticamente (-${cartVarPct}%). O topo do funil está secando.`);
-      recommendations.push(`<strong>Renove os Vídeos:</strong> Quem chega no checkout compra, mas o tráfego geral despencou. O algoritmo parou de entregar os vídeos antigos.`);
+      weakPoints.push(`<strong>Anomalia de Tráfego:</strong> As vendas subiram (+${ordersVarPct}%), mas a entrada de pessoas no carrinho caiu drasticamente (-${cartVarPct}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">⚠️ <strong>O que isso significa:</strong> O topo do funil secou. A conversão de quem clica está excelente, mas o algoritmo parou de entregar seus vídeos antigos. Você precisa de tráfego novo.</span>`);
     } else if (ordersDir === 'down' && cartDir === 'up') {
       score -= 15;
-      weakPoints.push(`<strong>Tráfego Sujo (Curiosos):</strong> As adições ao carrinho dispararam (+${cartVarPct}%), mas as vendas despencaram (-${ordersVarPct}%). O vídeo viralizou para o público errado ou o frete assustou todo mundo.`);
+      weakPoints.push(`<strong>Tráfego Sujo (Curiosos):</strong> As adições ao carrinho dispararam (+${cartVarPct}%), mas as vendas despencaram (-${ordersVarPct}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">⚠️ <strong>O que isso significa:</strong> O vídeo viralizou para o público errado, ou o frete assustou todo mundo. Estão clicando por curiosidade, não por intenção real de compra.</span>`);
     } else if (ordersDir === 'up' && cartDir === 'up' && orders > 0) {
       score += 15;
-      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo proporcionalmente. O funil está redondo e em expansão.`);
+      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo proporcionalmente.<br><br><span style="opacity: 0.85; font-size: 0.9em;">🚀 <strong>O que isso significa:</strong> O funil está redondo e em expansão. O aumento de curiosos reflete matematicamente no aumento de compradores reais.</span>`);
     }
 
     // === 2. DINÂMICA DE MERCADO (Demanda vs Concorrência) ===
     if (cartDir === 'down' && creatorsDir === 'up') {
       score -= 30;
-      weakPoints.push(`<strong>Saturação Aguda (Alerta Vermelho):</strong> O interesse do público encolheu (-${cartVarPct}%), mas a concorrência explodiu (+${creatorsVarPct}%). O bolo está menor com muito mais gente disputando.`);
-      recommendations.push(`<strong>Pule Fora:</strong> A matemática de tráfego orgânico não vai fechar. O mercado para este produto entrou em modo tubarão.`);
+      weakPoints.push(`<strong>Saturação Aguda (Alerta Vermelho):</strong> O interesse do público encolheu (-${cartVarPct}%), mas a concorrência explodiu (+${creatorsVarPct}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">🦈 <strong>O que isso significa:</strong> O bolo está menor e com muito mais gente disputando. A matemática de tráfego orgânico não vai fechar porque a oferta superou a demanda.</span>`);
     } else if (ordersDir === 'up' && creatorsDir === 'down' && orders > 0) {
       score += 20;
-      strongPoints.push(`<strong>Onda de Escalada (Oceano Azul Crescente):</strong> Vendas saltando (+${ordersVarPct}%), enquanto a concorrência foge (-${creatorsVarPct}%). Os rivais estão desistindo justo quando a demanda explode.`);
-      recommendations.push(`<strong>Acelere a Produção:</strong> Cenário matemático perfeito. Esmague o nicho publicando mais vídeos agora enquanto os outros dormem.`);
+      strongPoints.push(`<strong>Onda de Escalada (Oceano Azul Crescente):</strong> Vendas saltando (+${ordersVarPct}%), enquanto a concorrência foge (-${creatorsVarPct}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">🌊 <strong>O que isso significa:</strong> É o cenário matemático perfeito. Os rivais estão desistindo ou parando de postar exatamente no momento em que a demanda está explodindo. Domine o nicho sozinho.</span>`);
     } else if (orders > 0 && orders < 20 && creatorsDir !== 'down') {
       score -= 5;
-      weakPoints.push(`<strong>Volume Tímido (${orders} pedidos):</strong> Amostra pequena. É perigoso tirar conclusões definitivas com pouco volume absoluto.`);
+      weakPoints.push(`<strong>Volume Tímido (${orders} pedidos):</strong> Amostra geral ainda é pequena.<br><br><span style="opacity: 0.85; font-size: 0.9em;">ℹ️ <strong>O que isso significa:</strong> É perigoso tirar conclusões definitivas de mercado com um volume absoluto baixo. O produto ainda precisa de mais tempo rodando.</span>`);
     }
 
     // === 3. ANÁLISE DE CTR E RETENÇÃO (Cliques vazios vs Engajamento) ===
-    if (ctrDir === 'up' && ordersDir === 'down' && ordersDelta > 0) {
+    if (ctr < 3.5) {
       score -= 10;
-      weakPoints.push(`<strong>Cliques Vazios:</strong> O vídeo chama mais atenção (CTR subiu para ${ctr}%), mas as vendas caíram -${ordersVarPct}%. Promessa forte, mas produto fraco.`);
-      recommendations.push(`<strong>Alinhe Expectativas:</strong> Não faça clickbaits. O cliente clica esperando uma coisa e a loja entrega outra.`);
-    } else if (ctr >= 5.0) {
-      score += 10;
-      strongPoints.push(`<strong>Gancho Validado:</strong> CTR matemático excelente (${ctr}%). A barreira do clique já foi vencida.`);
+      weakPoints.push(`<strong>Baixa Retenção Inicial:</strong> CTR matemático muito baixo (${ctr}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">📉 <strong>O que isso significa:</strong> O gancho dos vídeos (primeiros 3 segundos) está fraco e o público está scrollando sem clicar. Melhore a promessa inicial do vídeo.</span>`);
+    } else if (ctrDir === 'up' && ordersDir === 'down') {
+      score -= 10;
+      weakPoints.push(`<strong>Cliques Vazios:</strong> O CTR subiu (+${ctrDeltaVal}%), mas as vendas caíram (-${ordersVarPct}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">⚠️ <strong>O que isso significa:</strong> Seu vídeo chama muita atenção no clique (clickbait), mas falha em reter o cliente na loja. O produto em si pode não estar convencendo.</span>`);
+    } else if (ctr >= 5) {
+      score += 15;
+      strongPoints.push(`<strong>Gancho Validado:</strong> CTR matemático excelente (${ctr}%).<br><br><span style="opacity: 0.85; font-size: 0.9em;">🔥 <strong>O que isso significa:</strong> A barreira do clique já foi vencida. Seus vídeos são extremamente magnéticos e param o scroll da audiência.</span>`);
     }
 
     // === 4. COMPORTAMENTO DE CHECKOUT (Conversão Real) ===
     if (cartAdds > 0 && orders > 0) {
       if (cartToSaleRate >= 80) {
          score += 20;
-         strongPoints.push(`<strong>Conversão Extrema (${cartToSaleRate.toFixed(1)}%):</strong> Praticamente todas as intenções de compra se convertem em vendas reais. Oferta e frete sem atrito.`);
+         strongPoints.push(`<strong>Conversão Extrema (${cartToSaleRate.toFixed(1)}%):</strong> Praticamente todas as intenções de compra se convertem em vendas reais.<br><br><span style="opacity: 0.85; font-size: 0.9em;">🏆 <strong>O que isso significa:</strong> O processo de compra da loja não tem atrito e a oferta do produto é irresistível e passa total credibilidade.</span>`);
       } else if (cartToSaleRate >= 40) {
          score += 15;
-         strongPoints.push(`<strong>Conversão Alta (${cartToSaleRate.toFixed(1)}%):</strong> Cerca de ${Math.round(cartToSaleRate)}% das pessoas que vão ao carrinho finalizam a compra. A relação entre clique e pagamento está forte.`);
+         strongPoints.push(`<strong>Conversão Alta (${cartToSaleRate.toFixed(1)}%):</strong> Cerca de ${Math.round(cartToSaleRate)}% das pessoas que vão ao carrinho finalizam a compra.<br><br><span style="opacity: 0.85; font-size: 0.9em;">✅ <strong>O que isso significa:</strong> A relação entre o desejo inicial e o pagamento está forte e saudável. O frete e o preço estão agradando.</span>`);
       } else if (cartToSaleRate >= 20) {
          score += 5;
-         strongPoints.push(`<strong>Conversão Padrão (${cartToSaleRate.toFixed(1)}%):</strong> Aproximadamente 1 a cada ${(100/cartToSaleRate).toFixed(1)} pessoas que adicionam ao carrinho pagam. Está dentro da média do mercado.`);
+         strongPoints.push(`<strong>Conversão Padrão (${cartToSaleRate.toFixed(1)}%):</strong> Aproximadamente 1 a cada ${(100/cartToSaleRate).toFixed(1)} pessoas que adicionam ao carrinho pagam.<br><br><span style="opacity: 0.85; font-size: 0.9em;">ℹ️ <strong>O que isso significa:</strong> Está dentro da média natural do mercado, o cliente reflete um pouco no checkout antes de decidir pagar.</span>`);
       } else {
          score -= 15;
-         weakPoints.push(`<strong>Gargalo no Checkout (${cartToSaleRate.toFixed(1)}%):</strong> Apenas ${Math.round(cartToSaleRate)}% finalizam o pedido. Quase todo o tráfego é perdido na hora de pagar (susto com frete ou preço final).`);
+         weakPoints.push(`<strong>Gargalo no Checkout (${cartToSaleRate.toFixed(1)}%):</strong> Apenas ${Math.round(cartToSaleRate)}% finalizam o pedido.<br><br><span style="opacity: 0.85; font-size: 0.9em;">🧱 <strong>O que isso significa:</strong> Quase todo o tráfego conquistado é jogado fora na hora H. Existe um susto real com o frete ou o preço escondido no último momento.</span>`);
          recommendations.push(`<strong>Filtro de Curiosos:</strong> Revele o preço final ou o frete já no vídeo para barrar os cliques vazios de quem não tem dinheiro.`);
       }
     }
@@ -347,10 +345,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const marketShareRatio = ordersPerCreator; // Vendas médias por afiliado
     if (marketShareRatio < 0.5 && creators >= 20) {
       score -= 15;
-      weakPoints.push(`<strong>Mercado Fatiado Demais:</strong> Com ${creators} afiliados, a fatia média é de apenas ${marketShareRatio.toFixed(2)} vendas por pessoa. Esforço desproporcional ao ganho.`);
+      weakPoints.push(`<strong>Mercado Fatiado Demais:</strong> Com ${creators} afiliados, a fatia média é de apenas ${marketShareRatio.toFixed(2)} vendas por pessoa.<br><br><span style="opacity: 0.85; font-size: 0.9em;">📉 <strong>O que isso significa:</strong> O esforço de gravação é totalmente desproporcional ao ganho. Muitas pessoas vendendo para poucos compradores.</span>`);
     } else if (marketShareRatio > 2 && creators > 0) {
       score += 15;
-      strongPoints.push(`<strong>Alta Fartura por Afiliado:</strong> A média matemática atual é de ${marketShareRatio.toFixed(1)} vendas por afiliado ativo. Um cenário altamente rentável e com espaço para você.`);
+      strongPoints.push(`<strong>Alta Fartura por Afiliado:</strong> A média matemática atual é de ${marketShareRatio.toFixed(1)} vendas por afiliado ativo.<br><br><span style="opacity: 0.85; font-size: 0.9em;">💰 <strong>O que isso significa:</strong> É um cenário altamente rentável e com pouca competição canibal. Tem muito espaço no mercado pra você lucrar.</span>`);
     }
 
     // === 5. CASOS DE ZERO ABSOLUTO (MAS COM OUTROS DADOS) ===
