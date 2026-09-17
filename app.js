@@ -220,85 +220,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const weakPoints = [];
     const recommendations = [];
 
-    // === 1. VOLUME E PREVISIBILIDADE ===
-    const isDroppingHeavily = ordersDir === 'down' && ordersDelta > (orders * 0.3);
+    // === CÁLCULO DE ESTADOS ANTERIORES E TAXAS REAIS ===
+    const prevOrders = ordersDir === 'up' ? Math.max(1, orders - Math.abs(ordersDelta)) : orders + Math.abs(ordersDelta);
+    const prevCartAdds = cartDir === 'up' ? Math.max(1, cartAdds - Math.abs(cartDelta)) : cartAdds + Math.abs(cartDelta);
+    const prevCreators = creatorsDir === 'up' ? Math.max(1, creators - Math.abs(creatorsDelta)) : creators + Math.abs(creatorsDelta);
 
-    if (orders === 0) {
-      score -= 20;
-      weakPoints.push(`<strong>Zero Vendas Registradas:</strong> O produto não possui nenhuma validação de demanda no período.`);
-      recommendations.push(`<strong>Não Escalar:</strong> Sem nenhuma venda, fazer anúncios ou vídeos em massa é desperdício de tempo e dinheiro.`);
-    } else if (orders < 10) {
+    const ordersVarPct = ((Math.abs(ordersDelta) / prevOrders) * 100).toFixed(1);
+    const cartVarPct = ((Math.abs(cartDelta) / prevCartAdds) * 100).toFixed(1);
+    const creatorsVarPct = ((Math.abs(creatorsDelta) / prevCreators) * 100).toFixed(1);
+
+    // === 1. COLAPSO DE DEMANDA VS SATURAÇÃO (Insight exigido pelo usuário) ===
+    if (cartDir === 'down' && creatorsDir === 'up') {
+      score -= 30;
+      weakPoints.push(`<strong>Colapso Matemático:</strong> O interesse encolheu (Carrinhos: -${cartVarPct}%), mas a concorrência explodiu (Afiliados: +${creatorsVarPct}%). O bolo está menor e com muito mais gente disputando.`);
+      recommendations.push(`<strong>Pule Fora:</strong> O mercado para este produto entrou em saturação aguda. A matemática de tráfego orgânico não vai fechar com tanta concorrência para pouca demanda.`);
+    } else if (ordersDir === 'down' && cartDir === 'down') {
+      // Ambos caíram. Caiu proporcional ou não?
+      if ((Math.abs(ordersDelta) / prevOrders) > (Math.abs(cartDelta) / prevCartAdds) * 1.3) {
+         score -= 20;
+         weakPoints.push(`<strong>Fuga no Checkout:</strong> As vendas caíram muito mais rápido (-${ordersVarPct}%) do que as adições ao carrinho (-${cartVarPct}%). O cliente entra na loja mas foge antes de pagar.`);
+         recommendations.push(`<strong>Atenção ao Frete/Preço:</strong> Algo mudou na loja nos últimos dias (frete mais caro ou preço subiu) e está matando a conversão final.`);
+      } else {
+         score -= 10;
+         weakPoints.push(`<strong>Tendência de Queda Proporcional:</strong> O produto esfriou no mercado. Tanto o interesse (-${cartVarPct}%) quanto as vendas (-${ordersVarPct}%) caíram na mesma proporção.`);
+      }
+    }
+
+    // === 2. ESCALA PERFEITA (Vendas subindo, Concorrência caindo/plana) ===
+    if (ordersDir === 'up' && creatorsDir === 'down' && orders >= 20) {
+      score += 30;
+      strongPoints.push(`<strong>Onda de Escalada (Oceano Azul Crescente):</strong> As vendas saltaram +${ordersVarPct}%, enquanto a concorrência caiu -${creatorsVarPct}%. Os concorrentes estão desistindo justo quando a demanda explode.`);
+      recommendations.push(`<strong>Multiplique a Frequência:</strong> É o cenário matemático perfeito. Publique o máximo de vídeos que puder para dominar o nicho enquanto a concorrência dorme.`);
+    } else if (ordersDir === 'up' && cartDir === 'up' && orders >= 20) {
+      score += 15;
+      strongPoints.push(`<strong>Crescimento Saudável:</strong> Vendas (+${ordersVarPct}%) e Carrinhos (+${cartVarPct}%) subindo. O funil está funcionando.`);
+    }
+
+    // === 3. ANÁLISE DE CTR E RETENÇÃO (Cliques vazios vs Engajamento) ===
+    if (ctrDir === 'up' && ordersDir === 'down' && ordersDelta > 0) {
       score -= 10;
-      weakPoints.push(`<strong>Volume Baixo (${orders} pedidos)</strong> Produto com pouquíssima saída. Base pequena para prever qualquer escala.`);
-      recommendations.push(`<strong>Teste Rápido:</strong> Grave no máximo 1 a 3 vídeos. Se não vender em 5 dias, descarte.`);
-    } else if (orders >= 50) {
-      if (isDroppingHeavily) {
-        score -= 5;
-        weakPoints.push(`<strong>Queda Aguda de Demanda:</strong> Apesar do volume de ${orders}, as vendas caíram ${ordersDelta}. O produto está perdendo força rapidamente.`);
-        recommendations.push(`<strong>Cuidado ao Escalar:</strong> A onda do produto parece estar passando. Não aumente o ritmo de postagens até entender essa queda.`);
-      } else {
-        score += 15;
-        strongPoints.push(`<strong>Demanda Consolidada (${orders} pedidos)</strong> Produto validado e vendendo em escala de forma saudável.`);
-        recommendations.push(`<strong>Momento de Escalar:</strong> A demanda está validada. Aumente a frequência de postagens sem medo.`);
-      }
-    } else {
-      if (isDroppingHeavily) {
-        weakPoints.push(`<strong>Tração Perdendo Força:</strong> Tem ${orders} pedidos, mas despencou ${ordersDelta}. Atenção à saturação.`);
-      } else {
-        score += 5;
-        strongPoints.push(`<strong>Tração Inicial (${orders} pedidos)</strong> Apresenta sinais consistentes de validação de vendas.`);
-        recommendations.push(`<strong>Aumente a Tração:</strong> Teste novos formatos de vídeo para achar um "campeão" e saltar as vendas.`);
-      }
+      weakPoints.push(`<strong>Cliques Vazios:</strong> O vídeo chama mais atenção (CTR subiu para ${ctr}%), mas as vendas caíram -${ordersVarPct}%. Promessa forte, mas produto fraco.`);
+      recommendations.push(`<strong>Alinhe Expectativas:</strong> Não faça clickbaits. O cliente clica esperando uma coisa e a loja entrega outra.`);
+    } else if (ctr >= 5.0) {
+      score += 10;
+      strongPoints.push(`<strong>Gancho Validado:</strong> CTR matemático excelente (${ctr}%). A barreira do clique já foi vencida.`);
     }
 
-    // === 2. ATRATIVIDADE (CTR) ===
-    let varText = ctrDelta > 0 ? `+${ctrDelta}%` : (ctrDelta < 0 ? `-${ctrDelta}%` : `estável`);
-    if (ctr >= 5.0) {
-      score += 20;
-      strongPoints.push(`<strong>Alta Atratividade (CTR ${ctr.toFixed(1)}%, ${varText})</strong> Excelente. Desperta desejo imediato e atrai cliques facilmente.`);
-      recommendations.push(`<strong>Foque no Hook (Gancho):</strong> O clique é fácil. Garanta atenção nos primeiros 3s de vídeo para reter esse público curioso.`);
-    } else if (ctr < 3.5 && ctr > 0) {
+    // === 4. CÁLCULO DE CONCORRÊNCIA E FATIA DE MERCADO ===
+    const marketShareRatio = ordersPerCreator; // Vendas médias por afiliado
+    if (marketShareRatio < 0.5 && creators > 500) {
       score -= 15;
-      weakPoints.push(`<strong>Baixa Retenção (CTR ${ctr.toFixed(1)}%)</strong> Produto não chama atenção. Exigirá uma angulação de vídeo muito criativa e difícil.`);
-      recommendations.push(`<strong>Mude a Abordagem Visual:</strong> O produto parece chato no feed. Use thumbs muito apelativas ou uma promessa forte nos 3s.`);
-    } else if (ctr > 0) {
-      strongPoints.push(`<strong>Atratividade Saudável (CTR ${ctr.toFixed(1)}%)</strong> Taxa de clique na média do mercado. Desperta interesse normal.`);
+      weakPoints.push(`<strong>Mercado Fatiado Demais:</strong> Com ${creators} afiliados, a fatia média é de apenas ${marketShareRatio.toFixed(2)} vendas por pessoa. Esforço desproporcional ao ganho.`);
+    } else if (marketShareRatio > 3 && creators < 100) {
+      score += 20;
+      strongPoints.push(`<strong>Alta Fartura por Afiliado:</strong> A média matemática atual é de ${marketShareRatio.toFixed(1)} vendas por afiliado ativo. Um cenário altamente rentável.`);
     }
 
-    // === 3. CONCORRÊNCIA E OCEANO AZUL ===
-    if (creators > 0) {
-      if (creators <= 5) {
-        score += 20;
-        strongPoints.push(`<strong>Oceano Azul (${creators} criadores)</strong> Concorrência quase nula. O caminho está livre se você viralizar.`);
-      } else if (creators > 20) {
-        score -= 20;
-        weakPoints.push(`<strong>Alta Concorrência (${creators} ativos)</strong> Mercado saturado dominado por muitos afiliados competindo pela mesma atenção.`);
-        recommendations.push(`<strong>Diferenciação Extrema:</strong> Só entre nessa briga se a sua qualidade de edição/roteiro esmagar a concorrência.`);
-      } else {
-        strongPoints.push(`<strong>Concorrência Moderada (${creators} ativos)</strong> Há disputa, mas vídeos bem feitos ainda conseguem se destacar com folga.`);
-      }
-    }
-
-    // === 4. COMPORTAMENTO DE CHECKOUT ===
-    if (cartAdds > 0) {
-      if (orders === 0) {
-         score -= 30;
-         weakPoints.push(`<strong>ALERTA GRAVE NO CARRINHO:</strong> ${cartAdds} pessoas adicionaram ao carrinho e NENHUMA comprou. Há um bloqueio crítico.`);
-         recommendations.push(`<strong>Audite o Checkout Imediatamente:</strong> Simule uma compra. Verifique se o frete está abusivo ou se o sistema da loja está quebrado antes de perder tempo.`);
-      } else if (cartAdds < 20) {
-         weakPoints.push(`<strong>Amostra Imprevisível</strong> Só ${cartAdds} carrinhos no total. Base muito pequena para cravar uma taxa de conversão segura.`);
-      } else {
-         if (cartToSaleRate >= 30) {
-            score += 15;
-            strongPoints.push(`<strong>Conversão Forte (${cartToSaleRate.toFixed(1)}%)</strong> Quem adiciona ao carrinho realmente compra. Oferta e frete estão irresistíveis.`);
-         } else if (cartToSaleRate < 15) {
-            score -= 15;
-            weakPoints.push(`<strong>Gargalo no Checkout (${cartToSaleRate.toFixed(1)}%)</strong> Muitos clicam no carrinho, quase ninguém paga. Susto com o preço ou frete alto.`);
-            recommendations.push(`<strong>Filtro de Curiosos:</strong> Revele o preço ou frete já no final do vídeo para filtrar quem não tem intenção de pagar.`);
-         } else {
-            strongPoints.push(`<strong>Conversão Padrão (${cartToSaleRate.toFixed(1)}%)</strong> A conversão da loja (do carrinho para a venda) está dentro da normalidade (15-30%).`);
-         }
-      }
+    // === 5. CASOS DE ZERO ABSOLUTO ===
+    if (orders === 0 && cartAdds > 0) {
+      score -= 40;
+      weakPoints.push(`<strong>Bloqueio Total de Conversão:</strong> ${cartAdds} intenções no carrinho e 0 compras (${(0).toFixed(2)}%).`);
+      recommendations.push(`<strong>Audite Imediatamente:</strong> O sistema de pagamento da loja está quebrado ou o frete está absurdo. Não invista tráfego nisso hoje.`);
+    } else if (orders === 0 && cartAdds === 0) {
+      score -= 20;
+      weakPoints.push(`<strong>Sem Tração (Zero Absoluto):</strong> Nenhuma métrica gerada no período selecionado.`);
     }
 
     // === 5. TRÁFEGO PAGO (SOMENTE SE SELECIONADO) ===
