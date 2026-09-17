@@ -49,7 +49,7 @@
           <div class="tt-metric-card" data-field="orders">
             <div class="tt-label">Pedidos</div>
             <div class="tt-input-with-suffix">
-              <input type="number" id="orders" class="tt-main-input" step="0.1" value="0" required>
+              <input type="text" inputmode="decimal" id="orders" class="tt-main-input" step="0.1" value="0" required>
               <select id="ordersMult" class="tt-mult-select">
                 <option value="1">_</option>
                 <option value="1000">K</option>
@@ -69,7 +69,7 @@
           <div class="tt-metric-card" data-field="ctr">
             <div class="tt-label">CTR</div>
             <div class="tt-input-with-suffix">
-              <input type="number" id="ctr" class="tt-main-input" step="0.1" value="0" required>
+              <input type="text" inputmode="decimal" id="ctr" class="tt-main-input" step="0.1" value="0" required>
               <span class="tt-percent-sign">%</span>
             </div>
             
@@ -85,7 +85,7 @@
           <div class="tt-metric-card" data-field="creators">
             <div class="tt-label">Número de criadores</div>
             <div class="tt-input-with-suffix">
-              <input type="number" id="creators" class="tt-main-input" step="0.1" value="0" required>
+              <input type="text" inputmode="decimal" id="creators" class="tt-main-input" step="0.1" value="0" required>
               <select id="creatorsMult" class="tt-mult-select">
                 <option value="1">_</option>
                 <option value="1000">K</option>
@@ -105,7 +105,7 @@
           <div class="tt-metric-card" data-field="cartAdds">
             <div class="tt-label">Usuários que adicionaram ao carrinho</div>
             <div class="tt-input-with-suffix">
-              <input type="number" id="cartAdds" class="tt-main-input" step="0.1" value="0" required>
+              <input type="text" inputmode="decimal" id="cartAdds" class="tt-main-input" step="0.1" value="0" required>
               <select id="cartAddsMult" class="tt-mult-select">
                 <option value="1">_</option>
                 <option value="1000">K</option>
@@ -125,11 +125,11 @@
           <div id="monetizationInputs" class="tt-paid-inputs">
             <div class="tt-metric-card">
               <div class="tt-label">Preço do Produto ($)</div>
-              <input type="number" id="price" class="tt-main-input" step="0.01" value="0.00">
+              <input type="text" inputmode="decimal" id="price" class="tt-main-input" step="0.01" value="0.00">
             </div>
             <div class="tt-metric-card">
               <div class="tt-label">Comissão por Venda ($)</div>
-              <input type="number" id="commission" class="tt-main-input" step="0.01" value="0.00">
+              <input type="text" inputmode="decimal" id="commission" class="tt-main-input" step="0.01" value="0.00">
             </div>
           </div>
 
@@ -166,7 +166,7 @@
 
             <div class="modal-input-group">
               <label for="modalInputVal">Valor da Variação (número positivo):</label>
-              <input type="number" id="modalInputVal" step="0.1" placeholder="Ex: 2.5" min="0">
+              <input type="text" inputmode="decimal" id="modalInputVal" step="0.1" placeholder="Ex: 2.5" min="0">
             </div>
 
             <button type="button" id="btnApplyVariation" class="btn-apply-modal">Confirmar Variação</button>

@@ -128,6 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
   btnCloseModal.addEventListener('click', closeModal);
   modalBackdrop.addEventListener('click', closeModal);
 
+  function parseLocalFloat(val) {
+    if (!val) return 0;
+    if (typeof val === 'number') return val;
+    return parseFloat(val.toString().replace(',', '.')) || 0;
+  }
+
   btnApplyVariation.addEventListener('click', () => {
     if (!activeField) return;
 
@@ -139,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hiddenDir.value = activeDir;
     // Garante que o valor salvo seja sempre positivo absoluto para evitar erros do tipo "- -3"
-    const parsedVal = Math.abs(parseFloat(modalInputVal.value) || 0);
+    const parsedVal = Math.abs(parseLocalFloat(modalInputVal.value));
     hiddenVal.value = parsedVal;
 
     const formattedText = activeField === 'ctr' ? `${parsedVal.toString().replace('.', ',')}%` : parsedVal;
@@ -173,37 +179,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // MATRIZ COMPLETA DE DIAGNÓSTICO E CAUSALIDADE PARA AFILIADOS
   function calculateAndRender() {
-    const ctr = parseFloat(document.getElementById('ctr').value) || 0;
+    const ctr = parseLocalFloat(document.getElementById('ctr').value);
     const ctrDir = document.getElementById('ctrDeltaDir').value;
-    const ctrDeltaVal = Math.abs(parseFloat(document.getElementById('ctrDelta').value) || 0);
+    const ctrDeltaVal = Math.abs(parseLocalFloat(document.getElementById('ctrDelta').value));
     const ctrDelta = ctrDir === 'up' ? ctrDeltaVal : -ctrDeltaVal;
     
-    const ordersBase = parseFloat(document.getElementById('orders').value) || 0;
-    const ordersMult = parseInt(document.getElementById('ordersMult').value) || 1;
+    const ordersBase = parseLocalFloat(document.getElementById('orders').value);
+    const ordersMult = parseLocalFloat(document.getElementById('ordersMult').value) || 1;
     const orders = Math.floor(ordersBase * ordersMult);
     const ordersDir = document.getElementById('ordersDeltaDir').value;
-    const ordersDeltaVal = Math.abs(parseInt(document.getElementById('ordersDelta').value) || 0);
+    const ordersDeltaVal = Math.abs(parseLocalFloat(document.getElementById('ordersDelta').value));
     const ordersDelta = ordersDir === 'up' ? ordersDeltaVal : -ordersDeltaVal;
     
-    const cartAddsBase = parseFloat(document.getElementById('cartAdds').value) || 0;
-    const cartAddsMult = parseInt(document.getElementById('cartAddsMult').value) || 1;
+    const cartAddsBase = parseLocalFloat(document.getElementById('cartAdds').value);
+    const cartAddsMult = parseLocalFloat(document.getElementById('cartAddsMult').value) || 1;
     const cartAdds = Math.floor(cartAddsBase * cartAddsMult);
     const cartDir = document.getElementById('cartDeltaDir').value;
-    const cartDeltaVal = Math.abs(parseInt(document.getElementById('cartDelta').value) || 0);
+    const cartDeltaVal = Math.abs(parseLocalFloat(document.getElementById('cartDelta').value));
     const cartDelta = cartDir === 'up' ? cartDeltaVal : -cartDeltaVal;
     
-    const creatorsBase = parseFloat(document.getElementById('creators').value) || 0;
-    const creatorsMult = parseInt(document.getElementById('creatorsMult').value) || 1;
+    const creatorsBase = parseLocalFloat(document.getElementById('creators').value);
+    const creatorsMult = parseLocalFloat(document.getElementById('creatorsMult').value) || 1;
     const creators = Math.floor(creatorsBase * creatorsMult);
     const creatorsDir = document.getElementById('creatorsDeltaDir').value;
-    const creatorsDeltaVal = Math.abs(parseInt(document.getElementById('creatorsDelta').value) || 0);
+    const creatorsDeltaVal = Math.abs(parseLocalFloat(document.getElementById('creatorsDelta').value));
     const creatorsDelta = creatorsDir === 'up' ? creatorsDeltaVal : -creatorsDeltaVal;
 
     // Métricas Derivadas
     // Se orders for maior que cartAdds (ex: comprou direto sem carrinho), limitamos a 100% para não gerar % bizarras
     const cartToSaleRate = cartAdds > 0 ? Math.min(100, (orders / cartAdds) * 100) : 0;
     const ordersPerCreator = creators > 0 ? (orders / creators) : 0;
-    const commission = parseFloat(document.getElementById('commission').value) || 0;
+    const commission = parseLocalFloat(document.getElementById('commission').value);
     const totalCommission = orders * commission;
 
     // Se tudo for ZERO (Produto nem começou a rodar ou form vazio), não rodar análise punitiva.
