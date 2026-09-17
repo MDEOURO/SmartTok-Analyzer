@@ -15,11 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Seleciona automaticamente o texto ao clicar no input (para não precisar apagar)
+  // Limpa o '0' automaticamente ao focar para não precisar apagar
   const allInputs = document.querySelectorAll('.tt-main-input, #modalInputVal');
   allInputs.forEach(input => {
-    input.addEventListener('focus', () => {
-      input.select();
+    input.addEventListener('focus', function() {
+      if (this.value === '0' || this.value === '0.00' || this.value === '0,00') {
+        this.value = '';
+      }
+    });
+    input.addEventListener('blur', function() {
+      if (this.value.trim() === '') {
+        this.value = (this.id === 'commission' || this.id === 'price') ? '0.00' : '0';
+      }
     });
   });
 
