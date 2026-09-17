@@ -206,6 +206,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const commission = parseFloat(document.getElementById('commission').value) || 0;
     const totalCommission = orders * commission;
 
+    // Se tudo for ZERO (Produto nem começou a rodar ou form vazio), não rodar análise punitiva.
+    if (orders === 0 && cartAdds === 0 && creators === 0 && ctr === 0) {
+      document.getElementById('resCartToSale').innerText = '0,0%';
+      document.getElementById('resCartsPerOrder').innerText = '0';
+      document.getElementById('resOrdersPerCreator').innerText = '0,0';
+      document.getElementById('resTotalCommission').innerText = '$0,00';
+      
+      document.getElementById('scoreText').textContent = '0';
+      const scoreRing = document.getElementById('scoreCircle');
+      if (scoreRing) scoreRing.setAttribute('stroke-dasharray', '0, 100');
+      
+      const badge = document.getElementById('verdictBadge');
+      if (badge) {
+        badge.textContent = 'AGUARDANDO PARÂMETROS';
+        badge.className = 'verdict-badge';
+        badge.style.backgroundColor = 'transparent';
+        badge.style.border = '1px solid var(--card-border)';
+        badge.style.color = 'var(--text-muted)';
+      }
+
+      document.querySelector('.reasons-container').innerHTML = `
+        <div style="margin-top: 12px;">
+          <div class="diagnostic-card" style="text-align: center; padding: 24px;">
+            <strong style="color: var(--tiktok-cyan); font-size: 1rem;">O produto ainda não tem dados suficientes.</strong>
+            <span style="color: var(--text-muted);">Preencha as métricas para cruzar os valores. Se for um produto do zero que você ainda vai testar, não se baseie apenas no painel e crie seus 3 vídeos de validação.</span>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
     // Atualizar os quadros de métricas derivadas
     document.getElementById('resCartToSale').innerText = cartToSaleRate.toFixed(1).replace('.', ',') + '%';
     document.getElementById('resCartsPerOrder').innerText = orders > 0 ? (cartAdds / orders).toFixed(2).replace('.', ',') : '0';
@@ -276,14 +307,15 @@ document.addEventListener('DOMContentLoaded', () => {
       strongPoints.push(`<strong>Alta Fartura por Afiliado:</strong> A média matemática atual é de ${marketShareRatio.toFixed(1)} vendas por afiliado ativo. Um cenário altamente rentável.`);
     }
 
-    // === 5. CASOS DE ZERO ABSOLUTO ===
+    // === 5. CASOS DE ZERO ABSOLUTO (MAS COM OUTROS DADOS) ===
     if (orders === 0 && cartAdds > 0) {
       score -= 40;
       weakPoints.push(`<strong>Bloqueio Total de Conversão:</strong> ${cartAdds} intenções no carrinho e 0 compras (${(0).toFixed(2)}%).`);
       recommendations.push(`<strong>Audite Imediatamente:</strong> O sistema de pagamento da loja está quebrado ou o frete está absurdo. Não invista tráfego nisso hoje.`);
-    } else if (orders === 0 && cartAdds === 0) {
+    } else if (orders === 0 && creators > 0) {
       score -= 20;
-      weakPoints.push(`<strong>Sem Tração (Zero Absoluto):</strong> Nenhuma métrica gerada no período selecionado.`);
+      weakPoints.push(`<strong>Esforço sem Retorno:</strong> Existem ${creators} criadores tentando vender e NENHUMA venda saiu.`);
+      recommendations.push(`<strong>Produto Não Validado:</strong> Os criadores não conseguem convencer o público a comprar. Pule fora.`);
     }
 
     // === 5. TRÁFEGO PAGO (SOMENTE SE SELECIONADO) ===
