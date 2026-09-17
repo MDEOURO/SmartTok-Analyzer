@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('resCartsPerOrder').innerText = '0';
       document.getElementById('resOrdersPerCreator').innerText = '0,0';
       document.getElementById('resTotalCommission').innerText = '$0,00';
+      document.getElementById('resEarningsPerCreator').innerText = '$0,00';
       
       const reasonsContainer = document.querySelector('.reasons-container');
       if (reasonsContainer) reasonsContainer.innerHTML = '';
@@ -218,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ordersPerCreator = creators > 0 ? (orders / creators) : 0;
     const commission = parseLocalFloat(document.getElementById('commission').value);
     const totalCommission = orders * commission;
+    const earningsPerCreator = creators > 0 ? (totalCommission / creators) : 0;
 
     // Se tudo for ZERO (Produto nem começou a rodar ou form vazio), não rodar análise punitiva.
     if (orders === 0 && cartAdds === 0 && creators === 0 && ctr === 0) {
@@ -225,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('resCartsPerOrder').innerText = '0';
       document.getElementById('resOrdersPerCreator').innerText = '0,0';
       document.getElementById('resTotalCommission').innerText = '$0,00';
+      document.getElementById('resEarningsPerCreator').innerText = '$0,00';
       
       document.getElementById('scoreText').textContent = '0';
       const scoreRing = document.getElementById('scoreCircle');
@@ -254,7 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('resCartToSale').innerText = cartToSaleRate.toFixed(1).replace('.', ',') + '%';
     document.getElementById('resCartsPerOrder').innerText = orders > 0 ? (cartAdds / orders).toFixed(2).replace('.', ',') : '0';
     document.getElementById('resOrdersPerCreator').innerText = ordersPerCreator.toFixed(1).replace('.', ',');
+    
+    // Formatação monetária local
     document.getElementById('resTotalCommission').innerText = '$' + totalCommission.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('resEarningsPerCreator').innerText = '$' + earningsPerCreator.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let score = 50;
     let badgeClass = 'status-warning';
