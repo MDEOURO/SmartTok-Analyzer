@@ -321,15 +321,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === 4. COMPORTAMENTO DE CHECKOUT (Conversão Real) ===
     if (cartAdds > 0 && orders > 0) {
-      if (cartToSaleRate >= 30) {
+      if (cartToSaleRate >= 80) {
+         score += 20;
+         strongPoints.push(`<strong>Conversão Extrema (${cartToSaleRate.toFixed(1)}%):</strong> Praticamente todas as intenções de compra se convertem em vendas reais. Oferta e frete sem atrito.`);
+      } else if (cartToSaleRate >= 40) {
          score += 15;
-         strongPoints.push(`<strong>Conversão Extrema (${cartToSaleRate.toFixed(1)}%):</strong> Quem adiciona ao carrinho realmente compra. Oferta e frete estão irresistíveis para o cliente final.`);
-      } else if (cartToSaleRate < 15) {
-         score -= 15;
-         weakPoints.push(`<strong>Gargalo no Checkout (${cartToSaleRate.toFixed(1)}%):</strong> Muitos clicam no carrinho, quase ninguém paga. Susto com o preço ou frete alto de última hora.`);
-         recommendations.push(`<strong>Filtro de Curiosos:</strong> Revele o preço ou frete já no final do vídeo para filtrar quem não tem intenção de pagar.`);
+         strongPoints.push(`<strong>Conversão Alta (${cartToSaleRate.toFixed(1)}%):</strong> Cerca de ${Math.round(cartToSaleRate)}% das pessoas que vão ao carrinho finalizam a compra. A relação entre clique e pagamento está forte.`);
+      } else if (cartToSaleRate >= 20) {
+         score += 5;
+         strongPoints.push(`<strong>Conversão Padrão (${cartToSaleRate.toFixed(1)}%):</strong> Aproximadamente 1 a cada ${(100/cartToSaleRate).toFixed(1)} pessoas que adicionam ao carrinho pagam. Está dentro da média do mercado.`);
       } else {
-         strongPoints.push(`<strong>Conversão Padrão (${cartToSaleRate.toFixed(1)}%):</strong> A conversão da loja (do carrinho para a venda) está dentro da normalidade.`);
+         score -= 15;
+         weakPoints.push(`<strong>Gargalo no Checkout (${cartToSaleRate.toFixed(1)}%):</strong> Apenas ${Math.round(cartToSaleRate)}% finalizam o pedido. Quase todo o tráfego é perdido na hora de pagar (susto com frete ou preço final).`);
+         recommendations.push(`<strong>Filtro de Curiosos:</strong> Revele o preço final ou o frete já no vídeo para barrar os cliques vazios de quem não tem dinheiro.`);
       }
     }
 
